@@ -66,8 +66,8 @@ public class T2SDB {
                           
              	   
              	   for (int k = 1;k < records.get(i).size(); k++) {
-//                 	   osw.write(records.get(index).get(k) + " ");    
-                 	   osw.write("("+ index+ ")"+records.get(index).get(k) + " ");       
+                 	   osw.write(records.get(index).get(k) + " ");    
+//                 	   osw.write("("+ index+ ")"+records.get(index).get(k) + " ");       
                    }                       
                    osw.write(-1 + " ");                       
                     

@@ -59,6 +59,48 @@ public class GetAttr {
 	}
 	
 	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training) {
+		//刪除Conflict rules
+		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
+		for (ArrayList<ArrayList<String>> rule : rules.keySet()) {			
+			rule_set.add(rule);
+		}
+		
+		for (int i = 0 ; i < rule_set.size(); i++) {
+    	    boolean same = false;
+    	    for (int j = i+1; j < rule_set.size(); j++) {
+    	        ArrayList<ArrayList<String>> temp1 = new ArrayList<>();
+    		    for (int k1 = 0; k1 < rule_set.get(i).size()-1; k1++) {
+    		        temp1.add(rule_set.get(i).get(k1));
+    	        }    
+    	        String str1 = rule_set.get(i).get(rule_set.get(i).size()-1).get(0);
+    	        ArrayList<ArrayList<String>> temp2 = new ArrayList<>();
+    		    for (int k1 = 0; k1 < rule_set.get(j).size()-1; k1++) {
+    		        temp2.add(rule_set.get(j).get(k1));
+    	        }
+    	        String str2 = rule_set.get(j).get(rule_set.get(j).size()-1).get(0);
+    	        if ((temp1.equals(temp2)) && (!str1.equals(str2))) {
+    	        	//PRINT DUPLICATES
+    	        	//int index_1 = rules_all_index.get(rule_set.get(i));  
+    	        	//int index_2 = rules_all_index.get(rule_set.get(j));
+    	        	//osw.write(index_1 + "    " + index_2 + "\r\n");
+    	        	//osw.write(rules.get(rule_set.get(i)).get(1) + "    " + rules.get(rule_set.get(j)).get(1) + "\r\n");
+    		        same = true;
+    		        rule_set.remove(j--);		    		        	
+    		        break;
+    	        } 
+    	    }    
+    	    if (same) {
+    	        //System.out.println(i);
+    	    	
+    	    		rule_set.remove(i--);	 
+    	    	
+       
+    	    }
+    	}		
+		
+		
+		
+		
 		HashMap<Integer, ArrayList<Integer>> result = new HashMap<>();    	
 		int i = 0;		
 //		System.out.println("SDB_for_training size: " + SDB_for_training.size());
@@ -67,7 +109,7 @@ public class GetAttr {
 			ArrayList<Integer> match = new ArrayList<>();
 			//欲檢查的sequence
 			ArrayList<ArrayList<String>> sequence = SDB_for_training.get(i);
-		    for (ArrayList<ArrayList<String>> rule : rules.keySet()) {
+		    for (ArrayList<ArrayList<String>> rule : rule_set) {
 		    	//得到Rule's prefix
 		    	ArrayList<ArrayList<String>> prefix_of_rule = get_prefix(rule);	
 		    	//System.out.println(rule);
@@ -100,7 +142,7 @@ public class GetAttr {
         	ArrayList<Integer> match = new ArrayList<>();
 			//欲檢查的sequence
 			ArrayList<ArrayList<String>> sequence = SDB_for_testing.get(j);
-		    for (ArrayList<ArrayList<String>> rule : rules.keySet()) {
+		    for (ArrayList<ArrayList<String>> rule : rule_set) {
 		    	//System.out.println("s:  " + sequence);
 		    	
 		    	//得到Rule's prefix
@@ -133,6 +175,75 @@ public class GetAttr {
 //        System.out.println("feature size: " +result.size());
 		return result;
 	}
+	public static HashMap<Integer, Double> BIAS_N(int length, int att_index, ArrayList<ArrayList<String>> records) {
+    	HashMap<Integer, Double> result = new HashMap<>();
+    	int col = att_index;   
+    	for (int i = 1; i < records.size(); i++) {
+    		double bias;
+    	    if (i <= length-1) {
+    	    	
+    	    } else {
+    	    	double sum_t = 0;
+    	    	if (i - length + 1 >= 1) {
+    	    		for (int j = i; j >= i-length+1; j--) {                
+                        sum_t = sum_t + Double.parseDouble(records.get(j).get(col));
+                    } 	    	    		
+    	    	}
+    	    	sum_t = sum_t / (double)length;
+    	    	bias = (Double.parseDouble(records.get(i).get(att_index)) - sum_t)/(double) sum_t;
+    	    	result.put(i, bias);  	    	
+    	    }    		
+    	}
+    	
+    	double average =  0.0;
+    	for (int i = 1; i <= result.size(); i++) {
+    		if (result.get(i) != null) {
+    			average += result.get(i);
+    		}
+    	}
+    	
+    	average /= (double) result.size();
+    	for (int i = 1; i < result.size(); i++) {
+    		if (result.get(i) == null) {
+    			result.put(i, average);
+    		}
+    	}
+
+    	return result;
+    }	
+	
+	//擷取Numerical BIAS
+	public static void featureExtraction_N(String output_filename, ArrayList<ArrayList<String>> records, HashMap<Integer, String> feature_target, int window_size, int period_for_MA_BIAS) {		
+    	ArrayList<ArrayList<String>> result = new ArrayList<>();
+    	HashMap<Integer, Double> BIAS_N_4 = BIAS_N(period_for_MA_BIAS, 4,records);
+    	HashMap<Integer, Double> BIAS_N_3= BIAS_N(period_for_MA_BIAS, 3,records);
+    	HashMap<Integer, Double> BIAS_N_2 = BIAS_N(period_for_MA_BIAS, 2,records);
+    	HashMap<Integer, Double> BIAS_N_1 = BIAS_N(period_for_MA_BIAS, 1,records);    	
+    	HashMap<Integer, String> FT_but = feature(4, records);
+    	
+		int training_data_size = (int) ((records.size()-1)*0.8);
+
+		for (int i = 0; i < records.size(); i++) {		
+			ArrayList<String> temp = new ArrayList<>();
+			//Add time
+			temp.add(records.get(i).get(0));
+			if(i == 0) {
+				temp.add("BIAS_N_3");				
+			} else {
+				temp.add(String.valueOf(BIAS_N_3.get(i)));
+			}	
+			//temp.add(records.get(i).get(records.get(i).size()-1));	
+			result.add(temp);
+		}		
+		try {
+		writeCSV("", output_filename,result);
+		} catch (IOException e) {
+			System.out.println("[ERROR] I/O Exception.");
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	
 	

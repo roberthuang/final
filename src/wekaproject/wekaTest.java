@@ -261,7 +261,7 @@ public class wekaTest {
 		int Original_Data = 1;
 		int MA_Relative = 1;
 		int MA_N = 0;
-        int MA_Diff = 0;
+        int MA_Diff = 1;
 		int user_defined_class = 0;
         int minsup = 12;
         double minconf = 0.8;
@@ -313,7 +313,12 @@ public class wekaTest {
 	    	feature_target = GetAttr.featureExtraction_target(records);
 	    }  
 		
+	    
+	    
 		/**Sequential Pattern Mining**/
+	    
+	    /*
+	    //(1)對原始之料使用SAX
 		//離散化 SAX (Training Data)
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		
@@ -324,6 +329,10 @@ public class wekaTest {
 		T2SDB t = new T2SDB();
 		int  SDB_Training_Size = t.translate_training_sliding_window(N, path_after_discrete_train,  feature_target, "SDB(Training).txt");
 		//System.out.println("Train size " + SDB_Training_Size);
+		
+		
+		
+		
 		//離散化 SAX (Testing Data)		
 	    SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
 	    
@@ -331,22 +340,56 @@ public class wekaTest {
 	    String path_after_discrete_test = "petro_subset1_2010_rate_after_sax_testing.csv";
 	    int  SDB_Testing_Size = t.translate_testing_sliding_window(N, path_after_discrete_test, "SDB(Testing).txt");	
 	    //System.out.println("Test size " + SDB_Testing_Size);
+	    */
+	    
+	    
+	    
+	    //(2)
+	    //先取bias
+		GetAttr.featureExtraction_N("transformed_petro_subset1_feature_for_sax.csv", records, feature_target, N,  period);	
+		
+		//再對bias值進行sax 
+		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
+		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
+		
+		//轉成Sequence
+		String path_after_discrete = "transformed_petro_subset1_feature_for_sax_training.csv";
+		T2SDB t = new T2SDB();
+		int SDB_Training_Size = t.translate_training_sliding_window(N, path_after_discrete,  feature_target, "SDB(Training).txt");
+	    
+		String path_of_testing_file = "transformed_petro_subset1_feature_for_sax_testing.csv";
+        int SDB_Testing_Size = t.translate_testing_sliding_window(N, path_of_testing_file, "SDB(Testing).txt");		
+		
+		
+		
 	    //Sequential Pattern Mining
 	    SequenceDatabase sequenceDatabase = new SequenceDatabase();
 	    sequenceDatabase.loadFile("SDB(Training).txt");	    
 	    AlgoPrefixSpan_with_Strings algo = new AlgoPrefixSpan_with_Strings(); 
-	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);   
+	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
+	    
+	    
+	    
+	    
 	    //產生Rule
 	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
 	    
 	    /**產生Sequential Feature*/
 	    
 	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));
+	   
 	    //for (int index : SF.keySet()) {
 	    //	System.out.println(index);
 	    //}
-	    int tt =1;
-	    if (tt == 1) {
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    int debug = 0;
+	    if (debug == 0) {
 		
 		for (List<String> para_list : powerSet) {		
 			if (para_list.isEmpty()) continue;
@@ -372,7 +415,7 @@ public class wekaTest {
                
             }
     	    
-    	    /*
+    	    
     	    // load CSV
     	    CSVLoader loader = new CSVLoader();
     	    loader.setSource(new File(preprocessing_path + "weka_training_" + period + "_" + para_list+".csv"));
@@ -383,7 +426,7 @@ public class wekaTest {
     	    saver.setFile(new File(preprocessing_path + "weka_training_" + period + "_" + para_list +".arff"));
     	    //saver.setDestination(new File(args[1]));
     	    saver.writeBatch();    	    
-    	    run(period, para_list, preprocessing_path, output_path);*/
+    	    run(period, para_list, preprocessing_path, output_path);
             
 		}
 	    }
