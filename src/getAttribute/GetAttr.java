@@ -211,7 +211,46 @@ public class GetAttr {
 
     	return result;
     }	
-	
+	//length是要選定的週期
+	public static HashMap<Integer, String> Move_Average(int length, String att, int att_index, ArrayList<ArrayList<String>> records) {
+        HashMap<Integer, String> result = new HashMap<>();    
+        //The column of Target
+        int col = att_index;                                                                                                                            
+        for (int i = 1; i < records.size(); i++ ) {       
+            if (i <= length) {
+                result.put(i, "MA"+ att.charAt(0) + length + "_1");     
+                continue;
+            }
+            
+            double sum_t = 0;
+            double sum_t_1 = 0;
+            if (i -length + 1 >= 1) {         
+                for (int p_1 = i; p_1 >= i-length+1; p_1--) {                
+                    sum_t = sum_t + Double.parseDouble(records.get(p_1).get(col));
+                } 
+                     
+                int j = i - 1;
+                if (j - length + 1 >=1) {
+                    
+                    for (int p_2 = j; p_2 >= j-length+1; p_2--) {
+                       
+                        sum_t_1 = sum_t_1 + Double.parseDouble(records.get(p_2).get(col));
+                    }
+                }
+            }          
+            
+            //Rise or Down
+            double MA = sum_t/length - sum_t_1/length;     
+            if (MA >= 0) {
+                //System.out.println("i: " + i + " " + MA);
+                result.put(i, "MA" + att.charAt(0) + length + "_1");    
+            } else {
+                //System.out.println("i: " + i + " " + MA);
+                result.put(i, "MA" + att.charAt(0) + length + "_0"); 
+            }              
+        }            
+        return result;
+    }    	
 	//擷取Numerical BIAS
 	public static void featureExtraction_N(String output_filename, ArrayList<ArrayList<String>> records, HashMap<Integer, String> feature_target, int window_size, int period_for_MA_BIAS) {		
     	ArrayList<ArrayList<String>> result = new ArrayList<>();
@@ -221,6 +260,11 @@ public class GetAttr {
     	HashMap<Integer, Double> BIAS_N_1 = BIAS_N(period_for_MA_BIAS, 1,records);    	
     	HashMap<Integer, String> FT_but = feature(4, records);
     	
+    	HashMap<Integer, String> MA_4 = Move_Average(period_for_MA_BIAS, records.get(0).get(4), 4, records);
+    	HashMap<Integer, String> MA_3 = Move_Average(period_for_MA_BIAS, records.get(0).get(3), 3, records);
+    	HashMap<Integer, String> MA_2 = Move_Average(period_for_MA_BIAS, records.get(0).get(2), 2, records);
+    	HashMap<Integer, String> MA_1 = Move_Average(period_for_MA_BIAS, records.get(0).get(1), 1, records);
+    	
 		int training_data_size = (int) ((records.size()-1)*0.8);
 
 		for (int i = 0; i < records.size(); i++) {		
@@ -228,9 +272,23 @@ public class GetAttr {
 			//Add time
 			temp.add(records.get(i).get(0));
 			if(i == 0) {
-				temp.add("BIAS_N_3");				
+				temp.add("BIAS_N_1");
+				temp.add("BIAS_N_2");
+				temp.add("BIAS_N_3");
+				temp.add("BIAS_N_4");	
+				temp.add("MA_1");
+				temp.add("MA_2");
+				temp.add("MA_3");
+				temp.add("MA_4");				
 			} else {
+				temp.add(String.valueOf(BIAS_N_1.get(i)));
+				temp.add(String.valueOf(BIAS_N_2.get(i)));
 				temp.add(String.valueOf(BIAS_N_3.get(i)));
+				temp.add(String.valueOf(BIAS_N_4.get(i)));
+				temp.add(MA_1.get(i));
+				temp.add(MA_2.get(i));
+				temp.add(MA_3.get(i));
+				temp.add(MA_4.get(i));
 			}	
 			//temp.add(records.get(i).get(records.get(i).size()-1));	
 			result.add(temp);
@@ -498,45 +556,7 @@ public class GetAttr {
         return result;
     }    
 	
-    public static HashMap<Integer, String> Move_Average(int length, String att, int att_index, ArrayList<ArrayList<String>> records) {
-        HashMap<Integer, String> result = new HashMap<>();    
-        //The column of Target
-        int col = att_index;                                                                                                                            
-        for (int i = 1; i < records.size(); i++ ) {       
-            if (i <= length) {
-                result.put(i, "MA"+ att.charAt(0) + length + "_1");     
-                continue;
-            }
-            
-            double sum_t = 0;
-            double sum_t_1 = 0;
-            if (i -length + 1 >= 1) {         
-                for (int p_1 = i; p_1 >= i-length+1; p_1--) {                
-                    sum_t = sum_t + Double.parseDouble(records.get(p_1).get(col));
-                } 
-                     
-                int j = i - 1;
-                if (j - length + 1 >=1) {
-                    
-                    for (int p_2 = j; p_2 >= j-length+1; p_2--) {
-                       
-                        sum_t_1 = sum_t_1 + Double.parseDouble(records.get(p_2).get(col));
-                    }
-                }
-            }          
-            
-            //Rise or Down
-            double MA = sum_t/length - sum_t_1/length;     
-            if (MA >= 0) {
-                //System.out.println("i: " + i + " " + MA);
-                result.put(i, "MA" + att.charAt(0) + length + "_1");    
-            } else {
-                //System.out.println("i: " + i + " " + MA);
-                result.put(i, "MA" + att.charAt(0) + length + "_0"); 
-            }              
-        }            
-        return result;
-    }    
+    
 	 
     public static HashMap<Integer, String> BIAS(int length, int att_index, double threshold, ArrayList<ArrayList<String>> records) {
     	HashMap<Integer, String> result = new HashMap<>();

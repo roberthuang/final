@@ -263,8 +263,8 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 12;
-        double minconf = 0.8;
+        int minsup = 52;
+        double minconf = 0.7;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
 		}
@@ -301,7 +301,7 @@ public class wekaTest {
 		    parameter.add("M_R_T_" + period);
 		}
 		
-		buildPowerSet(parameter, parameter.size());
+		
 		
 		/**擷取類別**/    
 		String path = data_path;    	    
@@ -345,12 +345,14 @@ public class wekaTest {
 	    
 	    
 	    //(2)
-	    //先取bias
-		GetAttr.featureExtraction_N("transformed_petro_subset1_feature_for_sax.csv", records, feature_target, N,  period);	
+	    //先取BIAS與MA
+		GetAttr.featureExtraction_N("transformed_petro_subset1_feature.csv", records, feature_target, N,  period);	
+		
 		
 		//再對bias值進行sax 
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
+		
 		
 		//轉成Sequence
 		String path_after_discrete = "transformed_petro_subset1_feature_for_sax_training.csv";
@@ -361,19 +363,20 @@ public class wekaTest {
         int SDB_Testing_Size = t.translate_testing_sliding_window(N, path_of_testing_file, "SDB(Testing).txt");		
 		
 		
-		
+        
 	    //Sequential Pattern Mining
 	    SequenceDatabase sequenceDatabase = new SequenceDatabase();
 	    sequenceDatabase.loadFile("SDB(Training).txt");	    
 	    AlgoPrefixSpan_with_Strings algo = new AlgoPrefixSpan_with_Strings(); 
 	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
 	    
-	    
-	    
-	    
+	    	    	   
 	    //產生Rule
 	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
+	    System.out.println(rule_size);
 	    
+	    int debug = 1;
+	    if (debug == 0) {
 	    /**產生Sequential Feature*/
 	    
 	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));
@@ -388,9 +391,8 @@ public class wekaTest {
 	    
 	    
 	    
-	    int debug = 0;
-	    if (debug == 0) {
-		
+	   
+	    buildPowerSet(parameter, parameter.size());
 		for (List<String> para_list : powerSet) {		
 			if (para_list.isEmpty()) continue;
 			

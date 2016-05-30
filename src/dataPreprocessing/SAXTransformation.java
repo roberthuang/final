@@ -163,13 +163,13 @@ public class SAXTransformation {
 						double val = Double.parseDouble(curValue);
 						for(int i=0;i<breakpoint_values[c].length;i++){
 							if(val <= breakpoint_values[c][i]){
-								curRecord.set(c, records.get(0).get(c).charAt(0) + "_" + (i+1));
+								curRecord.set(c, records.get(0).get(c) + "_" + (i+1));
 								//curRecord.set(c, "C" + "_" + (i+1));
 								break;
 							}
 						}
 						if(val > breakpoint_values[c][breakpoint_values[c].length-1]) {
-							curRecord.set(c, records.get(0).get(c).charAt(0) + "_" + (breakpoint_values[c].length+1));
+							curRecord.set(c, records.get(0).get(c) + "_" + (breakpoint_values[c].length+1));
 							//curRecord.set(c, "C" + "_" + (breakpoint_values[c].length+1));
 						}   
 					} catch(NumberFormatException e) {
@@ -268,7 +268,7 @@ public class SAXTransformation {
 		if(!outputfile.getParentFile().exists()) outputfile.getParentFile().mkdirs();
 		try {
 			FileWriter fw = new FileWriter(outputfile);
-			fw.write("{\r\n\t\"path\"\t\t:\t\"transformed_petro_subset1_feature_for_sax.csv\",");
+			fw.write("{\r\n\t\"path\"\t\t:\t\"transformed_petro_subset1_feature.csv\",");
 			fw.write("\r\n\t\"output\"\t:\t\"transformed_petro_subset1_feature_for_sax_testing.csv\",");
 			fw.write("\r\n\t\"test_setting\"\t:\t\"petro_subset1_breakpoints_2010.txt\",");
 			fw.write("\r\n\t\"attrs\"\t:\r\n\t[");
