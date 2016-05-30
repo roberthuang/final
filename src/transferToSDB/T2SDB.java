@@ -475,7 +475,7 @@ public class T2SDB {
 	}
     
     //weka 修改過的(增加Sequential Feature)
-    public int translate_training_sliding_window_weka_including_level_new(int next_week, String path, HashMap<Integer, String> class_table, String output, int have_average ,ArrayList<ArrayList<String>> original_data, int attribute_size, HashMap<Integer, ArrayList<Integer>> SF, int rule_size) {
+    public int translate_training_sliding_window_weka_including_level_new(int next_week, String path, HashMap<Integer, String> class_table, String output, int have_average ,ArrayList<ArrayList<String>> original_data, int attribute_size, HashMap<Integer, ArrayList<Integer>> SF) {
 	       int SDB_Training_Size = 0;
 	       try {
 	           ArrayList<ArrayList<String>> records = readCSV(path);	          
@@ -522,7 +522,7 @@ public class T2SDB {
 		        }
 		        		        
 		        //增加Sequential Feature的Ai
-		        
+		        int rule_size = SF.get(1).size();		        		;
 		        for(int i = 1; i <= rule_size; i++) {
 		        	osw.write("ASF" + t  + ", ");
 	        		t++;

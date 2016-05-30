@@ -22,7 +22,6 @@ import weka.core.converters.CSVLoader;
 import transferToSDB.T2SDB;
 import weka.core.converters.ArffSaver;
 public class wekaTest {
-	
 	static HashSet<List<String>> powerSet = new HashSet<List<String>>();
 	
 	public static BufferedReader readDataFile(String filename) {
@@ -263,7 +262,7 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 52;
+        int minsup = 102;
         double minconf = 0.7;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
@@ -373,9 +372,9 @@ public class wekaTest {
 	    	    	   
 	    //產生Rule
 	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
-	    System.out.println(rule_size);
+	    System.out.println("Rule size: " + rule_size);
 	    
-	    int debug = 1;
+	    int debug = 0;
 	    if (debug == 0) {
 	    /**產生Sequential Feature*/
 	    
@@ -393,6 +392,8 @@ public class wekaTest {
 	    
 	   
 	    buildPowerSet(parameter, parameter.size());
+	    System.out.println("Down for build powerset");
+	    
 		for (List<String> para_list : powerSet) {		
 			if (para_list.isEmpty()) continue;
 			
@@ -403,7 +404,7 @@ public class wekaTest {
     	    
     	    T2SDB t2sdb = new T2SDB();   
     	    
-    	    t2sdb.translate_training_sliding_window_weka_including_level_new(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1, SF, rule_size);
+    	    t2sdb.translate_training_sliding_window_weka_including_level_new(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1, SF);
     	    
     	    try {
                 ArrayList<ArrayList<String>> txt_training = read_text_weka(preprocessing_path+"weka_training_" + period + "_" + para_list +".txt");  

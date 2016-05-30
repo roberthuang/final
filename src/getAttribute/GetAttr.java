@@ -98,7 +98,7 @@ public class GetAttr {
     	    }
     	}		
 		
-		
+		System.out.println("After pruning: " + rule_set.size());
 		
 		
 		HashMap<Integer, ArrayList<Integer>> result = new HashMap<>();    	
