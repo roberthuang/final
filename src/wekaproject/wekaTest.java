@@ -264,7 +264,6 @@ public class wekaTest {
 		int user_defined_class = 0;
         int minsup = 42;
         double minconf = 0.75;
-        int top_k = 300;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
 		}
@@ -371,19 +370,18 @@ public class wekaTest {
 	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
 	    System.out.println("Done for Mining!");	    
 	    
-	    int debug = 0;
-	    if (debug == 0) {
+	   
 	    //產生Rule
 	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
 	    
 	    /**產生Sequential Feature*/	    
-	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"), top_k);
-	    System.out.println("Rule size: " + rule_size);
+	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
 	    System.out.println("Done for Rule!");	  
 	    //for (int index : SF.keySet()) {
 	    //	System.out.println(index);
 	    //}
-	    
+	    int debug = 0;
+	    if (debug == 0) {
 	    
 	    
 	    

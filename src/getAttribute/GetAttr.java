@@ -62,14 +62,14 @@ public class GetAttr {
 	    return result;
 	}
 	
-	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, final HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training, int top_k) {
+	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, final HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training) {
 		//刪除Conflict rules
 		
-		ArrayList<ArrayList<ArrayList<String>>> rule_set_before_top_k = new ArrayList<>();
+		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
 		for (ArrayList<ArrayList<String>> rule : rules.keySet()) {			
-			rule_set_before_top_k.add(rule);			
+			rule_set.add(rule);			
 		}
-		
+		/*
 		//對規則做排序:1.confidence 2.support 3.length
 		Collections.sort(rule_set_before_top_k, new Comparator<ArrayList<ArrayList<String>>>() {
 			@Override
@@ -101,12 +101,12 @@ public class GetAttr {
 		int count = 0;
 		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
 		for (ArrayList<ArrayList<String>> rule : rule_set_before_top_k) {
-			if (count <= top_k) {
-				System.out.println(rules.get(rule).get(1));
+			if (count < top_k) {
+//				System.out.println(rules.get(rule).get(1));
 		        rule_set.add(rule);	
 		        count++;
 			}
-		}
+		}*/
 		
 		
 		
