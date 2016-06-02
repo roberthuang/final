@@ -99,7 +99,7 @@ public class wekaTest {
     		        predictions.appendElements(validation.predictions());
     		        		     
     		        double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.78) continue;
+		            if (percentage < 0.8) continue;
     		        
                 	File fout = new File(output_path + "svm_liner_"+ period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
@@ -129,7 +129,7 @@ public class wekaTest {
             	    FastVector predictions = new FastVector();
     		        predictions.appendElements(validation.predictions());
     		        double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.78) continue;
+		            if (percentage < 0.8) continue;
             		
                 	File fout = new File(output_path + "svm_poly_" + period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
@@ -154,7 +154,7 @@ public class wekaTest {
 		            Evaluation validation = classify(models[j], train, test); 
 		            predictions.appendElements(validation.predictions());
 		            double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.78) continue;
+		            if (percentage < 0.8) continue;
 		            
                     File fout = new File(output_path + models[j].getClass().getSimpleName() + "_" + period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
@@ -262,8 +262,9 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 102;
-        double minconf = 0.7;
+        int minsup = 42;
+        double minconf = 0.75;
+        int top_k = 300;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
 		}
@@ -351,16 +352,16 @@ public class wekaTest {
 		//再對bias值進行sax 
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
-		
+		System.out.println("Done for SAX!");
 		
 		//轉成Sequence
 		String path_after_discrete = "transformed_petro_subset1_feature_for_sax_training.csv";
 		T2SDB t = new T2SDB();
 		int SDB_Training_Size = t.translate_training_sliding_window(N, path_after_discrete,  feature_target, "SDB(Training).txt");
-	    
+		System.out.println("Done for Sequence(Training)!");
 		String path_of_testing_file = "transformed_petro_subset1_feature_for_sax_testing.csv";
         int SDB_Testing_Size = t.translate_testing_sliding_window(N, path_of_testing_file, "SDB(Testing).txt");		
-		
+        System.out.println("Done for Sequence(Testing)!");
 		
         
 	    //Sequential Pattern Mining
@@ -368,18 +369,17 @@ public class wekaTest {
 	    sequenceDatabase.loadFile("SDB(Training).txt");	    
 	    AlgoPrefixSpan_with_Strings algo = new AlgoPrefixSpan_with_Strings(); 
 	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
-	    
-	    	    	   
-	    //產生Rule
-	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
-	    System.out.println("Rule size: " + rule_size);
+	    System.out.println("Done for Mining!");	    
 	    
 	    int debug = 0;
 	    if (debug == 0) {
-	    /**產生Sequential Feature*/
+	    //產生Rule
+	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
 	    
-	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));
-	   
+	    /**產生Sequential Feature*/	    
+	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"), top_k);
+	    System.out.println("Rule size: " + rule_size);
+	    System.out.println("Done for Rule!");	  
 	    //for (int index : SF.keySet()) {
 	    //	System.out.println(index);
 	    //}

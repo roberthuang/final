@@ -3,6 +3,10 @@ package getAttribute;
 import java.io.*;
 import java.util.*;
 
+
+
+
+
 public class GetAttr {
 	private static HashMap<Integer, Double> temp_sl = new HashMap<>();
 	private static HashMap<Integer, Double> temp_ll = new HashMap<>();
@@ -58,13 +62,57 @@ public class GetAttr {
 	    return result;
 	}
 	
-	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training) {
+	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, final HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training, int top_k) {
 		//刪除Conflict rules
-		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
+		
+		ArrayList<ArrayList<ArrayList<String>>> rule_set_before_top_k = new ArrayList<>();
 		for (ArrayList<ArrayList<String>> rule : rules.keySet()) {			
-			rule_set.add(rule);
+			rule_set_before_top_k.add(rule);			
 		}
 		
+		//對規則做排序:1.confidence 2.support 3.length
+		Collections.sort(rule_set_before_top_k, new Comparator<ArrayList<ArrayList<String>>>() {
+			@Override
+			public int compare(ArrayList<ArrayList<String>> rule1, ArrayList<ArrayList<String>> rule2) {
+				double conf_1 = rules.get(rule1).get(1);
+				double conf_2 = rules.get(rule2).get(1);
+				if (conf_1 > conf_2) {
+					return -1;
+				} else if (conf_1 == conf_2) {
+					double sup_1 = rules.get(rule1).get(0);
+					double sup_2 = rules.get(rule2).get(0);
+					if (sup_1 > sup_2) {
+						return -1;
+					} else if (sup_1 == sup_2) {
+						int len_1 = rules.get(rule1).size()-1;
+						int len_2 = rules.get(rule2).size()-1;
+						return len_1 - len_2;
+					} else {
+						return 1;
+					}
+				} else {
+					return 1;
+				}
+			}	
+		});		
+		//for (ArrayList<ArrayList<String>> rule : rule_set_before_top_k) {			
+		//	System.out.println("Conf: "+ rules.get(rule).get(1));		
+		//}
+		int count = 0;
+		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
+		for (ArrayList<ArrayList<String>> rule : rule_set_before_top_k) {
+			if (count <= top_k) {
+				System.out.println(rules.get(rule).get(1));
+		        rule_set.add(rule);	
+		        count++;
+			}
+		}
+		
+		
+		
+		
+		
+		/*
 		for (int i = 0 ; i < rule_set.size(); i++) {
     	    boolean same = false;
     	    for (int j = i+1; j < rule_set.size(); j++) {
@@ -96,9 +144,10 @@ public class GetAttr {
     	    	
        
     	    }
-    	}		
+    	}	*/
 		
-		System.out.println("After pruning: " + rule_set.size());
+		
+		
 		
 		
 		HashMap<Integer, ArrayList<Integer>> result = new HashMap<>();    	
