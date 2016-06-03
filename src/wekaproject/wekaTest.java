@@ -262,7 +262,7 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 200;
+        int minsup = 220;
         //double minconf = 0.94;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
@@ -377,13 +377,13 @@ public class wekaTest {
 	    //int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
 	    //Åª¨úSequence
 	    ArrayList<ArrayList<ArrayList<String>>> sequences = ReadSDB_for_sequence("sequential_patterns.txt");
-	    for (ArrayList<ArrayList<String>> sequence : sequences) {
-	    	System.out.println(sequence);
-	    }
-	    System.out.println(sequences.size());
+//	    for (ArrayList<ArrayList<String>> sequence : sequences) {
+//	    	System.out.println(sequence);
+//	    }
+	    System.out.println("Sequences size: " + sequences.size());
 	    
 	    
-	    int debug = 1;
+	    int debug = 0;
 	    if (debug == 0) {
 	    /**²£¥ÍSequential Feature*/	    
 	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, sequences, ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
