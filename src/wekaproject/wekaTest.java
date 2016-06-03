@@ -254,7 +254,7 @@ public class wekaTest {
 	 
 	public static void main(String[] args) throws Exception {		
 		/**參數設定**/		
-		int N = 5;
+		int N = 10;
 		int Original_Level = 1;
 		int Original_Relative = 1;
 		int Original_Data = 1;
@@ -262,8 +262,8 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 42;
-        double minconf = 0.75;
+        int minsup = 200;
+        //double minconf = 0.94;
         if (args.length < 4) {
 		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
 		}
@@ -368,20 +368,30 @@ public class wekaTest {
 	    sequenceDatabase.loadFile("SDB(Training).txt");	    
 	    AlgoPrefixSpan_with_Strings algo = new AlgoPrefixSpan_with_Strings(); 
 	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
+//	    algo.printStatistics(sequenceDatabase.size());
 	    System.out.println("Done for Mining!");	    
 	    
 	   
-	    //產生Rule
-	    int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
 	    
+	    //產生Rule
+	    //int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
+	    //讀取Sequence
+	    ArrayList<ArrayList<ArrayList<String>>> sequences = ReadSDB_for_sequence("sequential_patterns.txt");
+	    for (ArrayList<ArrayList<String>> sequence : sequences) {
+	    	System.out.println(sequence);
+	    }
+	    System.out.println(sequences.size());
+	    
+	    
+	    int debug = 1;
+	    if (debug == 0) {
 	    /**產生Sequential Feature*/	    
-	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, readRules("rules.txt"), ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
-	    System.out.println("Done for Rule!");	  
+	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, sequences, ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
+	    System.out.println("Done for Rule!");	
 	    //for (int index : SF.keySet()) {
 	    //	System.out.println(index);
 	    //}
-	    int debug = 0;
-	    if (debug == 0) {
+	    
 	    
 	    
 	    
@@ -508,7 +518,37 @@ public class wekaTest {
         return result;
         
     }
-	
+	//讀取Sequence
+		static ArrayList<ArrayList<ArrayList<String>>> ReadSDB_for_sequence(String filename) throws FileNotFoundException{
+	        ArrayList<ArrayList<ArrayList<String>>> result = new ArrayList<>();     
+	        Scanner sc = new Scanner(new File(filename));        
+	        while(sc.hasNextLine()) {        
+	            ArrayList<ArrayList<String>> itemsets = new ArrayList<>();
+	         
+	            String[] tokens = sc.nextLine().split("-1  #SUP:");
+	            String[] tokens_next = tokens[0].split(" -1 ");
+	            for (String s : tokens_next) {
+	                ArrayList<String> itemset = new ArrayList<>();
+	                String[] tokens_next_next = s.split(" ");
+	                for (String ss : tokens_next_next) {
+	                    itemset.add(ss);
+	                }
+	                itemsets.add(itemset);
+	            }
+	            result.add(itemsets);
+	        }            
+	        /*
+	        //debug
+	        for (Integer i : result.keySet()) {
+		        System.out.println(i + " " + result.get(i));
+		    
+		    }*/
+	        //System.out.println(result.size());
+	        sc.close();
+	        return result;
+	        
+	    }	
+		
 	//Read rule file
     static HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> readRules(String filename) throws FileNotFoundException{
 	        

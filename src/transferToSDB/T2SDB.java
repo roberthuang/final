@@ -522,8 +522,8 @@ public class T2SDB {
 		        }
 		        		        
 		        //¼W¥[Sequential FeatureªºAi
-		        int rule_size = SF.get(1).size();		        		;
-		        for(int i = 1; i <= rule_size; i++) {
+		        int sequences_size = SF.get(1).size();		        		;
+		        for(int i = 1; i <= sequences_size; i++) {
 		        	osw.write("ASF" + t  + ", ");
 	        		t++;
 		        }

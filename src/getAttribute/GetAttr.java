@@ -62,13 +62,8 @@ public class GetAttr {
 	    return result;
 	}
 	
-	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, final HashMap<ArrayList<ArrayList<String>>, ArrayList<Double>> rules, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training) {
-		//刪除Conflict rules
-		
-		ArrayList<ArrayList<ArrayList<String>>> rule_set = new ArrayList<>();
-		for (ArrayList<ArrayList<String>> rule : rules.keySet()) {			
-			rule_set.add(rule);			
-		}
+	public static HashMap<Integer, ArrayList<Integer>> sequential_feture(ArrayList<ArrayList<String>> records, final ArrayList<ArrayList<ArrayList<String>>> sequences, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_testing, HashMap<Integer, ArrayList<ArrayList<String>>> SDB_for_training) {
+		//刪除Conflict rules				
 		/*
 		//對規則做排序:1.confidence 2.support 3.length
 		Collections.sort(rule_set_before_top_k, new Comparator<ArrayList<ArrayList<String>>>() {
@@ -158,17 +153,15 @@ public class GetAttr {
 			ArrayList<Integer> match = new ArrayList<>();
 			//欲檢查的sequence
 			ArrayList<ArrayList<String>> sequence = SDB_for_training.get(i);
-		    for (ArrayList<ArrayList<String>> rule : rule_set) {
-		    	//得到Rule's prefix
-		    	ArrayList<ArrayList<String>> prefix_of_rule = get_prefix(rule);	
+		    for (ArrayList<ArrayList<String>> pattern : sequences) {		    		
 		    	//System.out.println(rule);
 		    	//System.out.println(prefix_of_rule);
 		    	//看每個Sequence是否包含了Rule's prefix
 		    	int size = 0;
                 int current = 0;
                 for (int i_1 = 0; i_1 < sequence.size(); i_1++) {                	
-                    for (int j = current; j < prefix_of_rule.size(); j++) {                                         
-                        if (sequence.get(i_1).containsAll(prefix_of_rule.get(j))) {    
+                    for (int j = current; j < pattern.size(); j++) {                                         
+                        if (sequence.get(i_1).containsAll(pattern.get(j))) {    
                             current = j;
                             current++;
                             size++;
@@ -178,7 +171,7 @@ public class GetAttr {
            
                 }        
                 //有包含Rule's prefix
-                if (size == prefix_of_rule.size()) {
+                if (size == pattern.size()) {
                     match.add(1);            	                      	
                 } else {
                 	match.add(0);
@@ -191,18 +184,15 @@ public class GetAttr {
         	ArrayList<Integer> match = new ArrayList<>();
 			//欲檢查的sequence
 			ArrayList<ArrayList<String>> sequence = SDB_for_testing.get(j);
-		    for (ArrayList<ArrayList<String>> rule : rule_set) {
+		    for (ArrayList<ArrayList<String>> pattern : sequences) {
 		    	//System.out.println("s:  " + sequence);
-		    	
-		    	//得到Rule's prefix
-		    	ArrayList<ArrayList<String>> prefix_of_rule = get_prefix(rule);
 		    	//System.out.println("r:  " + prefix_of_rule);
 		    	//看每個Sequence是否包含了Rule's prefix
 		    	int size = 0;
                 int current = 0;
                 for (int i_1 = 0; i_1 < sequence.size(); i_1++) {                	
-                    for (int j_1 = current; j_1 < prefix_of_rule.size(); j_1++) {                                         
-                        if (sequence.get(i_1).containsAll(prefix_of_rule.get(j_1))) {    
+                    for (int j_1 = current; j_1 < pattern.size(); j_1++) {                                         
+                        if (sequence.get(i_1).containsAll(pattern.get(j_1))) {    
                             current = j_1;
                             current++;
                             size++;
@@ -212,7 +202,7 @@ public class GetAttr {
            
                 }        
                 //有包含Rule's prefix
-                if (size == prefix_of_rule.size()) {
+                if (size == pattern.size()) {
                 	//System.out.println("Yes");
                     match.add(1);            	                      	
                 } else {
