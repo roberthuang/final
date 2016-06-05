@@ -254,7 +254,7 @@ public class wekaTest {
 	 
 	public static void main(String[] args) throws Exception {		
 		/**參數設定**/		
-		int N = 10;
+		int N = 5;
 		int Original_Level = 1;
 		int Original_Relative = 1;
 		int Original_Data = 1;
@@ -262,10 +262,10 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = 220;
+        int minsup = Integer.parseInt(args[4]);
         //double minconf = 0.94;
         if (args.length < 4) {
-		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods"); 	
+		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods (5) Minsup"); 	
 		}
         
 		String data_path = args[0];
@@ -525,7 +525,7 @@ public class wekaTest {
 	        while(sc.hasNextLine()) {        
 	            ArrayList<ArrayList<String>> itemsets = new ArrayList<>();
 	         
-	            String[] tokens = sc.nextLine().split("-1  #SUP:");
+	            String[] tokens = sc.nextLine().split(" -1  #SUP: ");
 	            String[] tokens_next = tokens[0].split(" -1 ");
 	            for (String s : tokens_next) {
 	                ArrayList<String> itemset = new ArrayList<>();
