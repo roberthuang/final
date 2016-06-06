@@ -535,7 +535,11 @@ public class wekaTest {
 	                }
 	                itemsets.add(itemset);
 	            }
-	            result.add(itemsets);
+	            if (itemsets.size()==1) {
+
+	            } else {
+	            	result.add(itemsets);
+	            }
 	        }            
 	        /*
 	        //debug
