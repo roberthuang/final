@@ -832,6 +832,59 @@ public class GetAttr {
 		HashMap<Integer, Double> B_N_S_10 = BIAS_Numeric(10,2, records);
 		HashMap<Integer, Double> B_N_R_10 = BIAS_Numeric(10,3, records);
 	  	HashMap<Integer, Double> B_N_T_10 = BIAS_Numeric(10,4, records);
+	  	
+	  	
+	  	HashMap<Integer, Double> B_N_C_11 = BIAS_Numeric(11,1, records);
+		HashMap<Integer, Double> B_N_S_11 = BIAS_Numeric(11,2, records);
+		HashMap<Integer, Double> B_N_R_11 = BIAS_Numeric(11,3, records);
+	  	HashMap<Integer, Double> B_N_T_11 = BIAS_Numeric(11,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_12 = BIAS_Numeric(12,1, records);
+		HashMap<Integer, Double> B_N_S_12 = BIAS_Numeric(12,2, records);
+		HashMap<Integer, Double> B_N_R_12 = BIAS_Numeric(12,3, records);
+	  	HashMap<Integer, Double> B_N_T_12 = BIAS_Numeric(12,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_13 = BIAS_Numeric(13,1, records);
+		HashMap<Integer, Double> B_N_S_13 = BIAS_Numeric(13,2, records);
+		HashMap<Integer, Double> B_N_R_13 = BIAS_Numeric(13,3, records);
+	  	HashMap<Integer, Double> B_N_T_13 = BIAS_Numeric(13,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_14 = BIAS_Numeric(14,1, records);
+		HashMap<Integer, Double> B_N_S_14 = BIAS_Numeric(14,2, records);
+		HashMap<Integer, Double> B_N_R_14 = BIAS_Numeric(14,3, records);
+	  	HashMap<Integer, Double> B_N_T_14 = BIAS_Numeric(14,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_15 = BIAS_Numeric(15,1, records);
+		HashMap<Integer, Double> B_N_S_15 = BIAS_Numeric(15,2, records);
+		HashMap<Integer, Double> B_N_R_15 = BIAS_Numeric(15,3, records);
+	  	HashMap<Integer, Double> B_N_T_15 = BIAS_Numeric(15,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_16 = BIAS_Numeric(16,1, records);
+		HashMap<Integer, Double> B_N_S_16 = BIAS_Numeric(16,2, records);
+		HashMap<Integer, Double> B_N_R_16 = BIAS_Numeric(16,3, records);
+	  	HashMap<Integer, Double> B_N_T_16 = BIAS_Numeric(16,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_17 = BIAS_Numeric(17,1, records);
+		HashMap<Integer, Double> B_N_S_17 = BIAS_Numeric(17,2, records);
+		HashMap<Integer, Double> B_N_R_17 = BIAS_Numeric(17,3, records);
+	  	HashMap<Integer, Double> B_N_T_17 = BIAS_Numeric(17,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_18 = BIAS_Numeric(18,1, records);
+		HashMap<Integer, Double> B_N_S_18 = BIAS_Numeric(18,2, records);
+		HashMap<Integer, Double> B_N_R_18 = BIAS_Numeric(18,3, records);
+	  	HashMap<Integer, Double> B_N_T_18 = BIAS_Numeric(18,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_19 = BIAS_Numeric(19,1, records);
+		HashMap<Integer, Double> B_N_S_19 = BIAS_Numeric(19,2, records);
+		HashMap<Integer, Double> B_N_R_19 = BIAS_Numeric(19,3, records);
+	  	HashMap<Integer, Double> B_N_T_19 = BIAS_Numeric(19,4, records);
+	  	
+	  	HashMap<Integer, Double> B_N_C_20 = BIAS_Numeric(20,1, records);
+		HashMap<Integer, Double> B_N_S_20 = BIAS_Numeric(20,2, records);
+		HashMap<Integer, Double> B_N_R_20 = BIAS_Numeric(20,3, records);
+	  	HashMap<Integer, Double> B_N_T_20 = BIAS_Numeric(20,4, records);
+	  	
+	  	
 	  	//MA
 	  	HashMap<Integer, Double> M_N_C_2 = Move_Average_Numeric(2,1, records);
 	  	HashMap<Integer, Double> M_N_S_2 = Move_Average_Numeric(2,2, records);
@@ -867,6 +920,51 @@ public class GetAttr {
 	  	HashMap<Integer, Double> M_N_S_8 = Move_Average_Numeric(8,2, records);
 	  	HashMap<Integer, Double> M_N_R_8 = Move_Average_Numeric(8,3, records);
 	  	HashMap<Integer, Double> M_N_T_8 = Move_Average_Numeric(8,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_9 = Move_Average_Numeric(9,1, records);
+	  	HashMap<Integer, Double> M_N_S_9 = Move_Average_Numeric(9,2, records);
+	  	HashMap<Integer, Double> M_N_R_9 = Move_Average_Numeric(9,3, records);
+	  	HashMap<Integer, Double> M_N_T_9 = Move_Average_Numeric(9,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_10 = Move_Average_Numeric(10,1, records);
+	  	HashMap<Integer, Double> M_N_S_10 = Move_Average_Numeric(10,2, records);
+	  	HashMap<Integer, Double> M_N_R_10 = Move_Average_Numeric(10,3, records);
+	  	HashMap<Integer, Double> M_N_T_10 = Move_Average_Numeric(10,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_11 = Move_Average_Numeric(11,1, records);
+	  	HashMap<Integer, Double> M_N_S_11 = Move_Average_Numeric(11,2, records);
+	  	HashMap<Integer, Double> M_N_R_11 = Move_Average_Numeric(11,3, records);
+	  	HashMap<Integer, Double> M_N_T_11 = Move_Average_Numeric(11,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_12 = Move_Average_Numeric(12,1, records);
+	  	HashMap<Integer, Double> M_N_S_12 = Move_Average_Numeric(12,2, records);
+	  	HashMap<Integer, Double> M_N_R_12 = Move_Average_Numeric(12,3, records);
+	  	HashMap<Integer, Double> M_N_T_12 = Move_Average_Numeric(12,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_13 = Move_Average_Numeric(13,1, records);
+	  	HashMap<Integer, Double> M_N_S_13 = Move_Average_Numeric(13,2, records);
+	  	HashMap<Integer, Double> M_N_R_13 = Move_Average_Numeric(13,3, records);
+	  	HashMap<Integer, Double> M_N_T_13 = Move_Average_Numeric(13,4, records);
+	  	
+		HashMap<Integer, Double> M_N_C_14 = Move_Average_Numeric(14,1, records);
+	  	HashMap<Integer, Double> M_N_S_14 = Move_Average_Numeric(14,2, records);
+	  	HashMap<Integer, Double> M_N_R_14 = Move_Average_Numeric(14,3, records);
+	  	HashMap<Integer, Double> M_N_T_14 = Move_Average_Numeric(14,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_15 = Move_Average_Numeric(15,1, records);
+	  	HashMap<Integer, Double> M_N_S_15 = Move_Average_Numeric(15,2, records);
+	  	HashMap<Integer, Double> M_N_R_15 = Move_Average_Numeric(15,3, records);
+	  	HashMap<Integer, Double> M_N_T_15 = Move_Average_Numeric(15,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_16 = Move_Average_Numeric(16,1, records);
+	  	HashMap<Integer, Double> M_N_S_16 = Move_Average_Numeric(16,2, records);
+	  	HashMap<Integer, Double> M_N_R_16 = Move_Average_Numeric(16,3, records);
+	  	HashMap<Integer, Double> M_N_T_16 = Move_Average_Numeric(16,4, records);
+	  	
+	  	HashMap<Integer, Double> M_N_C_17 = Move_Average_Numeric(17,1, records);
+	  	HashMap<Integer, Double> M_N_S_17 = Move_Average_Numeric(17,2, records);
+	  	HashMap<Integer, Double> M_N_R_17 = Move_Average_Numeric(17,3, records);
+	  	HashMap<Integer, Double> M_N_T_17 = Move_Average_Numeric(17,4, records);
 	  	
 	  	HashMap<Integer, Double> M_N_C_9 = Move_Average_Numeric(9,1, records);
 	  	HashMap<Integer, Double> M_N_S_9 = Move_Average_Numeric(9,2, records);

@@ -488,7 +488,7 @@ public class T2SDB {
 	 	        int size = next_week*(records.get(0).size()-2);
 	 	        int t ;
 		        for (t = 1; t <= size; t++) {
-		        	osw.write("A" + t  + ", ");    	
+		        	osw.write("Ar" + t  + ", ");    	
 		        }   
 		        //原始資料的平均與中位數
 		        if (have_average == 1) {

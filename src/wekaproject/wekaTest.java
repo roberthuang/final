@@ -254,7 +254,7 @@ public class wekaTest {
 	 
 	public static void main(String[] args) throws Exception {		
 		/**參數設定**/		
-		int N = 5;
+		int N = 20;
 		int Original_Level = 1;
 		int Original_Relative = 1;
 		int Original_Data = 1;
@@ -346,8 +346,7 @@ public class wekaTest {
 	    //(2)
 	    //先取BIAS與MA
 		GetAttr.featureExtraction_N("transformed_petro_subset1_feature.csv", records, feature_target, N,  period);	
-		
-		
+
 		//再對bias值進行sax 
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
@@ -368,7 +367,7 @@ public class wekaTest {
 	    sequenceDatabase.loadFile("SDB(Training).txt");	    
 	    AlgoPrefixSpan_with_Strings algo = new AlgoPrefixSpan_with_Strings(); 
 	    algo.runAlgorithm(sequenceDatabase, "sequential_patterns.txt", minsup);
-//	    algo.printStatistics(sequenceDatabase.size());
+	    algo.printStatistics(sequenceDatabase.size());
 	    System.out.println("Done for Mining!");	    
 	    
 	   
@@ -380,7 +379,6 @@ public class wekaTest {
 //	    for (ArrayList<ArrayList<String>> sequence : sequences) {
 //	    	System.out.println(sequence);
 //	    }
-	    System.out.println("Sequences size: " + sequences.size());
 	    
 	    
 	    int debug = 0;
@@ -481,8 +479,7 @@ public class wekaTest {
 		}*/
 	    //System.out.println(result.size());
 	    sc.close();
-	    return result;
-	        
+	    return result;	        
 	}
 	
 	
@@ -549,6 +546,7 @@ public class wekaTest {
 		    }*/
 	        //System.out.println(result.size());
 	        sc.close();
+	        System.out.println("After reducing: " + result.size());
 	        return result;
 	        
 	    }	
