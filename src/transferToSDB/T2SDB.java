@@ -488,7 +488,7 @@ public class T2SDB {
 	 	        int size = next_week*(records.get(0).size()-2);
 	 	        int t ;
 		        for (t = 1; t <= size; t++) {
-		        	osw.write("Ar" + t  + ", ");    	
+		        	osw.write("A" + t  + ", ");    	
 		        }   
 		        //﹍戈キА籔い计
 		        if (have_average == 1) {
@@ -516,7 +516,7 @@ public class T2SDB {
 		        	*/
 		        	
 		        	for (int i = 1; i <= attribute_size*2; i++) {
-		        		osw.write("Am" + t  + ", ");
+		        		osw.write("A" + t  + ", ");
 		        		t++;
 		        	}
 		        }
@@ -524,7 +524,7 @@ public class T2SDB {
 		        //糤Sequential FeatureAi
 		        int sequences_size = SF.get(1).size();		        		;
 		        for(int i = 1; i <= sequences_size; i++) {
-		        	osw.write("ASF" + t  + ", ");
+		        	osw.write("A" + t  + ", ");
 	        		t++;
 		        }
 		        
@@ -612,6 +612,8 @@ public class T2SDB {
 		            	   osw.write(SF.get(i).get(j)+ ", ");    
 		               }
 	               } 
+	               
+	               
 	               //Add Target Class
                    int Target_class_index = i + next_week;
 	               if (Target_class_index <= training_data) {
@@ -705,6 +707,266 @@ public class T2SDB {
 		               for (int j = 0; j < SF.get(i).size(); j++) {
 			               osw.write(SF.get(i).get(j)+ ", ");    
 			           }
+		               
+		               //Add Target Class
+	                   int Target_class_index = i + next_week;
+//	                   System.out.println("mod_test:  " +i + "  " + Target_class_index);
+		               osw.write(class_table.get(Target_class_index));
+		               //Debug
+//		               osw.write(class_table.get(Target_class_index) + "(" + Target_class_index + ")" + " "+ -1 + " ");		               	               	               	               	          
+		               osw.write("\r\n");  
+		           }	            
+	            
+	            
+	            
+	            
+	                   osw.close();        
+	       } catch (FileNotFoundException e) {
+		       System.out.println("[ERROR] File Not Found Exception.");
+		    e.printStackTrace();
+		   } catch (IOException e) {
+	           System.out.println("[ERROR] I/O Exception.");
+	           e.printStackTrace();
+	       }      
+	       
+	         
+	       return SDB_Training_Size;
+    
+    }
+    
+    //weka э筁(糤Sequential Feature)
+    public int translate_training_sliding_window_weka_including_level_new2(int next_week, String path, HashMap<Integer, String> class_table, String output, int have_average ,ArrayList<ArrayList<String>> original_data, int attribute_size) {
+	       int SDB_Training_Size = 0;
+	       try {
+	           ArrayList<ArrayList<String>> records = readCSV(path);	          
+	           //output
+	           File fout = new File(output);
+		       FileOutputStream fos = new FileOutputStream(fout);
+		       OutputStreamWriter osw = new OutputStreamWriter(fos);   
+		       
+		       //Write Title
+	 	        int size = next_week*(records.get(0).size()-2);
+	 	        int t ;
+		        for (t = 1; t <= size; t++) {
+		        	osw.write("A" + t  + ", ");    	
+		        }   
+		        //﹍戈キА籔い计
+		        if (have_average == 1) {
+		        	
+		        	
+		        	/*
+		        	//キА
+		        	osw.write("A" + t  + ", ");    	
+		        	t++;
+		        	osw.write("A" + t  + ", ");  
+		        	t++;
+		        	osw.write("A" + t  + ", "); 
+		        	t++;
+		        	osw.write("A" + t  + ", "); 
+		        	
+		        	t++;
+		        	//い计
+		        	osw.write("A" + t  + ", ");    	
+		        	t++;
+		        	osw.write("A" + t  + ", ");  
+		        	t++;
+		        	osw.write("A" + t  + ", "); 
+		        	t++;
+		        	osw.write("A" + t  + ", "); 
+		        	*/
+		        	
+		        	for (int i = 1; i <= attribute_size*2; i++) {
+		        		osw.write("A" + t  + ", ");
+		        		t++;
+		        	}
+		        }
+		        /*	        
+		        //糤Sequential FeatureAi
+		        int sequences_size = SF.get(1).size();		        		;
+		        for(int i = 1; i <= sequences_size; i++) {
+		        	osw.write("A" + t  + ", ");
+	        		t++;
+		        }*/
+		        
+		        osw.write("Target");  
+		        osw.write("\r\n");  
+		        
+		        int training_data = (int)((records.size()- 1)*0.8);
+		        
+		        //Training
+	            for (int i = 1; i <= training_data; i++) { 
+	            	
+	               	
+	               double average_cruede = 0;
+	               double average_smr = 0;
+	               double average_rate = 0;
+	               double average_t = 0;
+	               
+	               ArrayList<Double> cruede = new  ArrayList<>();
+	               ArrayList<Double> smr = new  ArrayList<>();
+	               ArrayList<Double> rate = new  ArrayList<>();
+	               ArrayList<Double> target = new  ArrayList<>();
+	               for (int p = 0; p < next_week; p++) {
+	                   int index = i + p; 
+	                   
+	                   if ((index  <=  training_data) && ((i + next_week) <=   training_data)) {    
+	                	   //ま
+	                       for (int k = 1; k < records.get(index).size()-1; k++) {
+//	                   	       osw.write("("+ index+ ")"+ " "+records.get(index).get(k) + " ");       
+	                           osw.write(records.get(index).get(k) + ", "); 	       
+	                       }                       
+	                       //osw.write(-1 + " ");
+	                   } 
+	                   
+	                   if (have_average == 1) {
+	                   //System.out.println( Double.parseDouble(original_data.get(index).get(1)));
+	                   average_cruede = average_cruede + Double.parseDouble(original_data.get(index).get(1));
+	                   
+	                   cruede.add(Double.parseDouble(original_data.get(index).get(1)));
+	                 
+	                   average_smr = average_smr + Double.parseDouble(original_data.get(index).get(2));
+	                   smr.add(Double.parseDouble(original_data.get(index).get(2)));
+	                   
+	                   average_rate = average_rate + Double.parseDouble(original_data.get(index).get(3));
+	                   rate.add(Double.parseDouble(original_data.get(index).get(3)));
+	                   
+	                   average_t = average_t + Double.parseDouble(original_data.get(index).get(4));
+	                   target.add(Double.parseDouble(original_data.get(index).get(4)));
+	                   }
+	               }
+	               if (have_average == 1) {
+	                   if ((i + next_week) <=  training_data) {
+	                       average_cruede /= next_week;
+	                       osw.write(average_cruede + ", "); 
+	               
+	                       average_smr /= next_week;
+	                       osw.write(average_smr + ", "); 
+	               
+	                       average_rate /= next_week;
+	                       osw.write(average_rate  + ", "); 
+	               
+	                       average_t /= next_week;
+	                       osw.write(average_t + ", "); 
+	                   
+	                       Collections.sort(cruede);	                      
+	                       Collections.sort(smr);
+	                       Collections.sort(rate);
+	                       Collections.sort(target);
+//	                       for (int g = 0; g < target.size(); g++) {
+//	                           System.out.print(target.get(g) + "  ");   
+//	                            
+//	                       }
+//	                       System.out.println("MED: " + med(target)); 
+	                       osw.write(med(cruede) + ", "); 
+	                       osw.write(med(smr) + ", "); 
+	                       osw.write(med(rate) + ", "); 
+	                       osw.write(med(target) + ", "); 
+	                   }
+	               }
+	               //糤Sequential Feature
+	             
+	                            
+	               /*   
+	               if ((i + next_week) <=  training_data) {
+	            	   for (int j = 0; j < SF.get(i).size(); j++) {
+		            	   osw.write(SF.get(i).get(j)+ ", ");    
+		               }
+	               } */
+	               
+	               
+	               //Add Target Class
+                   int Target_class_index = i + next_week;
+	               if (Target_class_index <= training_data) {
+//	            	   System.out.println("mod:  " +i + "  " + Target_class_index);
+	                   osw.write(class_table.get(Target_class_index));
+	                   //Debug
+//	                   osw.write(class_table.get(Target_class_index) + "(" + Target_class_index + ")" + " "+ -1 + " ");
+	               } else {
+	                   break;
+	               } 	               	               	               	            
+	               osw.write("\r\n");  
+	           }
+	            
+                   //传Testing	            
+	               for (int i = training_data + 1; i <= records.size()-1-next_week; i++) { 
+	            	   
+	               	
+		               double average_cruede = 0;
+		               double average_smr = 0;
+		               double average_rate = 0;
+		               double average_t = 0;
+		               
+		               ArrayList<Double> cruede = new  ArrayList<>();
+		               ArrayList<Double> smr = new  ArrayList<>();
+		               ArrayList<Double> rate = new  ArrayList<>();
+		               ArrayList<Double> target = new  ArrayList<>();
+		               for (int p = 0; p < next_week; p++) {
+		                   int index = i + p; 
+		                   
+		                     
+		                   //ま
+		                   for (int k = 1; k < records.get(index).size()-1; k++) {
+//		                   	   osw.write("("+ index+ ")"+ " "+records.get(index).get(k) + " ");       
+		                       osw.write(records.get(index).get(k) + ", "); 	       
+		                   }                       
+		                   //osw.write(-1 + " ");
+		                    
+		                   
+		                   if (have_average == 1) {
+		                   //System.out.println( Double.parseDouble(original_data.get(index).get(1)));
+		                   average_cruede = average_cruede + Double.parseDouble(original_data.get(index).get(1));
+		                   
+		                   cruede.add(Double.parseDouble(original_data.get(index).get(1)));
+		                 
+		                   average_smr = average_smr + Double.parseDouble(original_data.get(index).get(2));
+		                   smr.add(Double.parseDouble(original_data.get(index).get(2)));
+		                   
+		                   average_rate = average_rate + Double.parseDouble(original_data.get(index).get(3));
+		                   rate.add(Double.parseDouble(original_data.get(index).get(3)));
+		                   
+		                   average_t = average_t + Double.parseDouble(original_data.get(index).get(4));
+		                   target.add(Double.parseDouble(original_data.get(index).get(4)));
+		                   }
+		               }
+		               if (have_average == 1) {
+		                   
+		                       average_cruede /= next_week;
+		                       osw.write(average_cruede+", "); 
+		               
+		                       average_smr /= next_week;
+		                       osw.write(average_smr +", "); 
+		               
+		                       average_rate /= next_week;
+		                       osw.write(average_rate + ", "); 
+		               
+		                       average_t /= next_week;
+		                       osw.write(average_t +", "); 
+		                   
+		                       Collections.sort(cruede);	                      
+		                       Collections.sort(smr);
+		                       Collections.sort(rate);
+		                       Collections.sort(target);
+//		                       for (int g = 0; g < target.size(); g++) {
+//		                           System.out.print(target.get(g) + "  ");   
+//		                            
+//		                       }
+//		                       System.out.println("MED: " + med(target)); 
+		                       osw.write(med(cruede)+", "); 
+		                       osw.write(med(smr) +", "); 
+		                       osw.write(med(rate) +", "); 
+		                       osw.write(med(target) + ", "); 
+		                   
+		               }
+		               //糤Sequential Feature
+		               
+		              
+		               
+		                            
+		               //System.out.println(i);
+		               /*
+		               for (int j = 0; j < SF.get(i).size(); j++) {
+			               osw.write(SF.get(i).get(j)+ ", ");    
+			           }*/
 		               
 		               //Add Target Class
 	                   int Target_class_index = i + next_week;

@@ -262,11 +262,11 @@ public class wekaTest {
 		int MA_N = 0;
         int MA_Diff = 1;
 		int user_defined_class = 0;
-        int minsup = Integer.parseInt(args[4]);
+        //int minsup = Integer.parseInt(args[4]);
         //double minconf = 0.94;
-        if (args.length < 4) {
-		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods (5) Minsup"); 	
-		}
+//        if (args.length < 4) {
+//		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods (5) Minsup"); 	
+//		}
         
 		String data_path = args[0];
 		String preprocessing_path = args[1];
@@ -345,8 +345,8 @@ public class wekaTest {
 	    
 	    //(2)
 	    //先取BIAS與MA
-		GetAttr.featureExtraction_N("transformed_petro_subset1_feature.csv", records, feature_target, N,  period);	
-
+		//GetAttr.featureExtraction_N("transformed_petro_subset1_feature.csv", records, feature_target, N,  period);	
+/*
 		//再對bias值進行sax 
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
@@ -379,13 +379,13 @@ public class wekaTest {
 //	    for (ArrayList<ArrayList<String>> sequence : sequences) {
 //	    	System.out.println(sequence);
 //	    }
-	    
+	    */
 	    
 	    int debug = 0;
 	    if (debug == 0) {
 	    /**產生Sequential Feature*/	    
-	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, sequences, ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
-	    System.out.println("Done for Rule!");	
+//	    HashMap<Integer, ArrayList<Integer>> SF = GetAttr.sequential_feture(records, sequences, ReadSDB_for_testing("SDB(Testing).txt"), Read_Training_Data("SDB(Training).txt"));	    
+//	    System.out.println("Done for Rule!");	
 	    //for (int index : SF.keySet()) {
 	    //	System.out.println(index);
 	    //}
@@ -410,7 +410,8 @@ public class wekaTest {
     	    
     	    T2SDB t2sdb = new T2SDB();   
     	    
-    	    t2sdb.translate_training_sliding_window_weka_including_level_new(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1, SF);
+    	    //t2sdb.translate_training_sliding_window_weka_including_level_new(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1, SF);
+    	    t2sdb.translate_training_sliding_window_weka_including_level_new2(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1);
     	    
     	    try {
                 ArrayList<ArrayList<String>> txt_training = read_text_weka(preprocessing_path+"weka_training_" + period + "_" + para_list +".txt");  
