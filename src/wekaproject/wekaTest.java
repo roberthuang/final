@@ -87,8 +87,7 @@ public class wekaTest {
 			    
 			//SVM MODULE, SET KERNEL
             if (j == 1) {
-            	
-            	
+
             	try {        	
             		 //LINEAR
             	    String options = ( "-K 0" );
@@ -99,7 +98,7 @@ public class wekaTest {
     		        predictions.appendElements(validation.predictions());
     		        		     
     		        double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.8) continue;
+		            if (percentage < 0.5) continue;
     		        
                 	File fout = new File(output_path + "svm_liner_"+ period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
@@ -129,7 +128,7 @@ public class wekaTest {
             	    FastVector predictions = new FastVector();
     		        predictions.appendElements(validation.predictions());
     		        double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.8) continue;
+		            if (percentage < 0.5) continue;
             		
                 	File fout = new File(output_path + "svm_poly_" + period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
@@ -154,12 +153,12 @@ public class wekaTest {
 		            Evaluation validation = classify(models[j], train, test); 
 		            predictions.appendElements(validation.predictions());
 		            double percentage  = validation.correct()/(double)(validation.incorrect() + validation.correct());
-		            if (percentage < 0.8) continue;
+		            if (percentage < 0.5) continue;
 		            
                     File fout = new File(output_path + models[j].getClass().getSimpleName() + "_" + period + "_" + para_list +".arff");                	
              	    FileOutputStream fos = new FileOutputStream(fout);
                     OutputStreamWriter osw = new OutputStreamWriter(fos);   			        
- 
+                    
 		    // Uncomment to see the summary for each training-testing pair.
 		    //System.out.println(models[j].toString());
 			
@@ -254,7 +253,7 @@ public class wekaTest {
 	 
 	public static void main(String[] args) throws Exception {		
 		/**參數設定**/		
-		int N = 20;
+		int N = 5;
 		int Original_Level = 1;
 		int Original_Relative = 1;
 		int Original_Data = 1;
@@ -263,10 +262,9 @@ public class wekaTest {
         int MA_Diff = 1;
 		int user_defined_class = 0;
         //int minsup = Integer.parseInt(args[4]);
-        //double minconf = 0.94;
-//        if (args.length < 4) {
-//		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods (5) Minsup"); 	
-//		}
+        if (args.length < 4) {
+		    System.out.println("Please input: (1) data_path  (2) preprocessing_path  (3) output_path  (4) periods (5) Minsup"); 	
+		}
         
 		String data_path = args[0];
 		String preprocessing_path = args[1];
@@ -315,38 +313,12 @@ public class wekaTest {
 	    
 	    
 		/**Sequential Pattern Mining**/
-	    
-	    /*
-	    //(1)對原始之料使用SAX
-		//離散化 SAX (Training Data)
-		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
-		
-		
-		
-	    //轉成sequence (Training Data)
-		String path_after_discrete_train = "petro_subset1_2010_rate_after_sax_training.csv";
-		T2SDB t = new T2SDB();
-		int  SDB_Training_Size = t.translate_training_sliding_window(N, path_after_discrete_train,  feature_target, "SDB(Training).txt");
-		//System.out.println("Train size " + SDB_Training_Size);
-		
-		
-		
-		
-		//離散化 SAX (Testing Data)		
-	    SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
-	    
-	    //轉成sequence (Testing Data)
-	    String path_after_discrete_test = "petro_subset1_2010_rate_after_sax_testing.csv";
-	    int  SDB_Testing_Size = t.translate_testing_sliding_window(N, path_after_discrete_test, "SDB(Testing).txt");	
-	    //System.out.println("Test size " + SDB_Testing_Size);
-	    */
-	    
-	    
-	    
+	  
+	    /*	    
 	    //(2)
 	    //先取BIAS與MA
 		//GetAttr.featureExtraction_N("transformed_petro_subset1_feature.csv", records, feature_target, N,  period);	
-/*
+
 		//再對bias值進行sax 
 		SAXTransformation.start("SAXTransformation_config_petro_subset1_2010.txt");
 		SAXTransformation_Testing.start("petro_subset1_breakpoints_2010.txt");
@@ -370,16 +342,15 @@ public class wekaTest {
 	    algo.printStatistics(sequenceDatabase.size());
 	    System.out.println("Done for Mining!");	    
 	    
-	   
+	   */
 	    
-	    //產生Rule
-	    //int rule_size = RuleEvaluation.start("RuleEvaluation_config.txt", minconf, minsup, N, SDB_Training_Size);
+	   
 	    //讀取Sequence
-	    ArrayList<ArrayList<ArrayList<String>>> sequences = ReadSDB_for_sequence("sequential_patterns.txt");
+//	    ArrayList<ArrayList<ArrayList<String>>> sequences = ReadSDB_for_sequence("sequential_patterns.txt");
 //	    for (ArrayList<ArrayList<String>> sequence : sequences) {
 //	    	System.out.println(sequence);
 //	    }
-	    */
+	   
 	    
 	    int debug = 0;
 	    if (debug == 0) {
@@ -390,13 +361,6 @@ public class wekaTest {
 	    //	System.out.println(index);
 	    //}
 	    
-	    
-	    
-	    
-	    
-	    
-	    
-	   
 	    buildPowerSet(parameter, parameter.size());
 	    System.out.println("Down for build powerset");
 	    
@@ -410,13 +374,13 @@ public class wekaTest {
     	    
     	    T2SDB t2sdb = new T2SDB();   
     	    
-    	    //t2sdb.translate_training_sliding_window_weka_including_level_new(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1, SF);
-    	    t2sdb.translate_training_sliding_window_weka_including_level_new2(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1);
+    	    t2sdb.translate_training_sliding_window_weka_including_level(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1);
+    	    //t2sdb.translate_training_sliding_window_weka_including_level_new2(N, preprocessing_path + "weka_"  + period + "_" + para_list +".csv", feature_target, preprocessing_path+"weka_training_" + period + "_" + para_list +".txt", Original_Level, records, records.get(0).size()-1);
     	    
     	    try {
                 ArrayList<ArrayList<String>> txt_training = read_text_weka(preprocessing_path+"weka_training_" + period + "_" + para_list +".txt");  
                 try {
-    		        writeCSV("", preprocessing_path + "weka_training_" + period + "_" + para_list +".csv", txt_training);
+    		        writeCSV("", "preprocessing_training\\"+ "weka_training_" + period + "_" + para_list +".csv", txt_training);
     		    } catch (IOException e) {
    			        System.out.println("[ERROR] I/O Exception.");
     			    e.printStackTrace();
@@ -424,19 +388,18 @@ public class wekaTest {
             } catch (FileNotFoundException e) {
                
             }
-    	    
-    	    
+
     	    // load CSV
-    	    CSVLoader loader = new CSVLoader();
-    	    loader.setSource(new File(preprocessing_path + "weka_training_" + period + "_" + para_list+".csv"));
-    	    Instances data1 = loader.getDataSet();
+//    	    CSVLoader loader = new CSVLoader();
+//    	    loader.setSource(new File("preprocessing_training\\" + "weka_training_" + period + "_" + para_list+".csv"));
+//    	    Instances data1 = loader.getDataSet();
     	    // save ARFF
-    	    ArffSaver saver = new ArffSaver();
-    	    saver.setInstances(data1);
-    	    saver.setFile(new File(preprocessing_path + "weka_training_" + period + "_" + para_list +".arff"));
-    	    //saver.setDestination(new File(args[1]));
-    	    saver.writeBatch();    	    
-    	    run(period, para_list, preprocessing_path, output_path);
+//    	    ArffSaver saver = new ArffSaver();
+//    	    saver.setInstances(data1);
+//    	    saver.setFile(new File("preprocessing_training\\"+ "weka_training_" + period + "_" + para_list +".arff"));
+//    	    //saver.setDestination(new File(args[1]));
+//    	    saver.writeBatch();    	    
+//    	    run(period, para_list, preprocessing_path, output_path);
             
 		}
 	    }

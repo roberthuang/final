@@ -2282,18 +2282,15 @@ public class GetAttr {
     	    
     	    double price_now = Double.parseDouble(records.get(i).get(index_of_target_att));
     	    double price_pre = Double.parseDouble(records.get(i-1).get(index_of_target_att));
-    	    if (0 < (price_now-price_pre) && (price_now-price_pre) < 30) {
-    	    	result.put(i, "None_Rise");     
-    	    } else if (30 <= (price_now-price_pre) && (price_now-price_pre) <= 100) {
-    	    	result.put(i, "Rise");  
-    	    } else if ((price_now-price_pre) > 100) {
+    	    double price_level = price_now-price_pre;
+    	    if (0 <= price_level && price_level <= 100) {
+    	    	result.put(i, "Rise");     
+    	    } else if (price_level > 100) {
     	    	result.put(i, "Most_Rise");  
-    	    } else if (-30 < (price_now-price_pre) && (price_now-price_pre) <=0) {
-    	    	result.put(i, "None_Down");  
-    	    } else if (-100 <= (price_now-price_pre) && (price_now-price_pre) <= -30) {
-    	    	result.put(i, "Down");
-    	    } else if ((price_now-price_pre) < -100) {
-    	    	result.put(i, "Most_Down");
+    	    } else if (price_level < 0 && price_level > -100) {
+    	    	result.put(i, "Down");  
+    	    } else {
+    	    	result.put(i, "Most_Down");  
     	    }
     	}    	  
     	return result;  

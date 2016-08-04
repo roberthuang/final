@@ -308,8 +308,8 @@ public class T2SDB {
 	       return SDB_Training_Size;
 	}
     
-    //weka
-    public int translate_training_sliding_window_weka_including_level(int next_week, String path, HashMap<Integer, String> class_table, String output, int have_average ,ArrayList<ArrayList<String>> original_data, int attribute_size, HashMap<Integer, ArrayList<Integer>> SF) {
+    //沒有Sequence Feature
+    public int translate_training_sliding_window_weka_including_level(int next_week, String path, HashMap<Integer, String> class_table, String output, int have_average ,ArrayList<ArrayList<String>> original_data, int attribute_size) {
 	       int SDB_Training_Size = 0;
 	       try {
 	           ArrayList<ArrayList<String>> records = readCSV(path);	          
@@ -355,12 +355,7 @@ public class T2SDB {
 		        	}
 		        }
 		        		        
-		        //增加Sequential Feature的Ai
-		        t++;
-		        for(int i = 1; i <= SF.size(); i++) {
-		        	osw.write("A" + t  + ", ");
-	        		t++;
-		        }
+		       
 		        
 		        osw.write("Target");  
 		        osw.write("\r\n");  
@@ -443,14 +438,7 @@ public class T2SDB {
 	               //System.out.println(i);
 	               //System.out.println(SF.get(i));
 	                            
-	                 
-	               if ((i + next_week) <records.size()) {
-	            	   for (int j = 0; j < SF.get(i).size(); j++) {
-		            	   osw.write(SF.get(i).get(j)+ ", ");    
-		               }
-	               } else {
-	            	   continue;
-	               }
+	            
 	               //Add Target Class
                    int Target_class_index = i + next_week;
 	               if (Target_class_index <records.size()) {
